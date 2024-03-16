@@ -28,7 +28,7 @@ if __name__ == "__main__":
     )
 
     prompt_batch = [[{'role': 'user', 'content': 'Hello!! How are you?'}]] * 8
-    results, tokens = generator.chat_completion(
+    results = generator.chat_completion(
         prompt_batch,
         max_gen_len=max_gen_len,
         top_p=top_p,

@@ -1,4 +1,4 @@
-# Llama 2
+# Llama 2 (for TPU v3-8)
 
 We are unlocking the power of large language models. Our latest version of Llama is now accessible to individuals, creators, researchers and businesses of all sizes so that they can experiment, innovate and scale their ideas responsibly. 
 
@@ -32,17 +32,48 @@ In a conda env with PyTorch / CUDA available, clone the repo and run in the top-
 pip install -e .
 ```
 
+## What's Different?
+This is a modified version of the [Llama2 Google Next Inference](https://github.com/pytorch-tpu/llama/tree/llama2-google-next-inference) Branch and works on TPU v3-8 hardware. Look `TORCH_XLA_USER_GUIDE.md` for details. Possible use cases:
+- Run Llama 7B (even 13B) inference on Kaggle TPU VMs.
+- Leverage the TPU to generate large about of texts with big batch size (upto 64).
+
 ## Inference
 
-Different models require different model-parallel (MP) values:
+```
+import os
+import torch
 
-|  Model | MP |
-|--------|----|
-| 7B     | 1  |
-| 13B    | 2  |
-| 70B    | 8  |
+from llama import Llama
 
-All models support sequence length up to 4096 tokens, but we pre-allocate the cache according to `max_seq_len` and `max_batch_size` values. So set those according to your hardware.
+USE_CUDA = os.environ.get('USE_CUDA', False)
+
+mp = True
+ckpt_dir = '/path/to/llama'
+tokenizer_path = '/path/to/tokenizer.model'
+temperature = 0.5
+top_p = 0.9
+max_seq_len = 1024
+max_batch_size = 8             ## this is where tpu shines
+max_gen_len = None
+dynamo = True
+
+generator = Llama.build(
+    ckpt_dir=ckpt_dir,
+    tokenizer_path=tokenizer_path,
+    max_seq_len=max_seq_len,
+    max_batch_size=max_batch_size,
+    dynamo=dynamo
+)
+
+prompt_batch = [[{'role': 'user', 'content': 'Hello!! How are you?'}]] * 8
+results = generator.chat_completion(
+    prompt_batch,
+    max_gen_len=max_gen_len,
+    top_p=top_p,
+    temperature=temperature
+)
+
+```
 
 ### Pretrained Models
 

@@ -4,7 +4,7 @@ No need for guilds. Please refer to the code in `example_chat_completion.py` for
 
 ## What is this?
 
-This branch is a modified version of the [Llama2 Google Next Inference](https://github.com/pytorch-tpu/llama/tree/llama2-google-next-inference) Branch. It is specifically designed to run Llama2 7B on TPU v3-8, unlike the Google Next Inference version, which only supports TPU v4 and v5e.
+This is a modified version of the [Llama2 Google Next Inference](https://github.com/pytorch-tpu/llama/tree/llama2-google-next-inference) Branch. It is specifically designed to run Llama2 7B on TPU v3-8, unlike the Google Next Inference version, which only supports TPU v4 and v5e.
 
 ## How does it work?
 
